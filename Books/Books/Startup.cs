@@ -1,4 +1,5 @@
 using Infrastructure;
+using Infrastructure.DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -29,7 +30,7 @@ namespace Books
             });
 
             services
-                .ConfigureInfrastructure()
+                .ConfigureInfrastructure(Configuration.GetConnectionString("BooksDbContext"))
                 .ConfigureService();
         }
 

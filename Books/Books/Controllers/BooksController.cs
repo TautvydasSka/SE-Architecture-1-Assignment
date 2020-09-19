@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
-using Domain.Entities;
+using Contract;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 
@@ -26,7 +26,7 @@ namespace Books.Controllers
         [HttpPost]
         public ActionResult Post([FromBody] Book book)
         {
-            _booksService.Add(book);
+            _booksService.Add(book.ToDomainObject());
 
             return StatusCode((int)HttpStatusCode.Created);
         }

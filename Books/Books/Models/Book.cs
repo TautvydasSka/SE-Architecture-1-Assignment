@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Books.Models
 {
-    public class Book : IValidatableObject
+    public class Book // : IValidatableObject
     {
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            ValidationResult.
-        }
+
     }
 }

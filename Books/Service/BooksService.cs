@@ -8,23 +8,26 @@ namespace Service
 {
     public class BooksService : IBooksService
     {
-        private readonly IBooksRepository _booksRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BooksService(IBooksRepository booksRepository)
+        public BooksService(IUnitOfWork booksRepository)
         {
-            _booksRepository = booksRepository;
+            _unitOfWork = booksRepository;
         }
 
         public void Add(Book book)
         {
-            var existingBooks = _booksRepository.GetAll();
+            //var existingBooks = _unitOfWork.GetAll();
 
-            if (existingBooks.Any(eb => eb.ISBN.Equals(book.ISBN, StringComparison.InvariantCultureIgnoreCase)))
-            {
-                // bad request
-            }
+            //if (existingBooks.Any(eb => eb.ISBN.Equals(book.ISBN, StringComparison.InvariantCultureIgnoreCase)))
+            //{
+            //    // bad request
+            //}
 
-            _booksRepository.Add(book);
+            //_unitOfWork.Add(book);
+
+            throw new NotImplementedException();
+
         }
 
         public void Delete(string isbn)
@@ -34,7 +37,7 @@ namespace Service
 
         public IEnumerable<Book> GetBooks()
         {
-            return _booksRepository.GetAll();
+            throw new NotImplementedException();
         }
 
         public void Update(Book book)
