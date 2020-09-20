@@ -1,48 +1,80 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
 using Infrastructure.DataAccess;
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace Service
 {
     public class BooksService : IBooksService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<Book> _bookRepository;
 
-        public BooksService(IUnitOfWork booksRepository)
+        public BooksService(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = booksRepository;
+            _unitOfWork = unitOfWork;
+            _bookRepository = _unitOfWork.GetRepository<Book>();
         }
 
-        public void Add(Book book)
+        public async Task<OperationResult<Book>> Add(Book book)
         {
-            //var existingBooks = _unitOfWork.GetAll();
+            var operationResult = new OperationResult<Book>();
+            var existingBookWithSameIsbn = await _bookRepository.GetFirstOrDefault(b => b.ISBN.Equals(book.ISBN));
 
-            //if (existingBooks.Any(eb => eb.ISBN.Equals(book.ISBN, StringComparison.InvariantCultureIgnoreCase)))
-            //{
-            //    // bad request
-            //}
+            if (existingBookWithSameIsbn != null)
+            {
+                operationResult.ValidationResult.PropertyValidations.Add(nameof(Book.ISBN), new List<string> { "A book with the same ISBN already exists!" });
+                operationResult.Status = Status.ValidationError;
+                return operationResult;
+            }
 
-            //_unitOfWork.Add(book);
+            await _bookRepository.Add(book);
+            await _unitOfWork.CommitAsync();
 
-            throw new NotImplementedException();
-
+            return operationResult;
         }
 
-        public void Delete(string isbn)
+        public async Task<OperationResult<Book>> Delete(string isbn)
         {
-            throw new NotImplementedException();
+            var operationResult = new OperationResult<Book>();
+            var existingBook = await _bookRepository.GetFirstOrDefault(b => b.ISBN.Equals(isbn));
+
+            if (existingBook == null)
+            {
+                operationResult.Status = Status.NotFound;
+                return operationResult;
+            }
+
+            _bookRepository.Delete(existingBook);
+            await _unitOfWork.CommitAsync();
+
+            return operationResult;
         }
 
-        public IEnumerable<Book> GetBooks()
+        public IEnumerable<Book> Get()
         {
-            throw new NotImplementedException();
+            return _bookRepository.Get();
         }
 
-        public void Update(Book book)
+        public async Task<OperationResult<Book>> Update(Book book)
         {
-            throw new NotImplementedException();
+            var operationResult = new OperationResult<Book>();
+            var existingBook = await _bookRepository.GetFirstOrDefault(b => b.ISBN.Equals(book.ISBN));
+
+            if (existingBook == null)
+            {
+                operationResult.Status = Status.NotFound;
+                return operationResult;
+            }
+
+            existingBook.Author = book.Author;
+            existingBook.Title = book.Title;
+            existingBook.PageCount = book.PageCount;
+
+            await _unitOfWork.CommitAsync();
+
+            return operationResult;
         }
     }
 }

@@ -16,7 +16,6 @@ namespace Contract
         [MinLength(2)]
         public string Title { get; set; }
 
-        [Required]
         [Range(1, int.MaxValue)]
         public int PageCount { get; set; }
 

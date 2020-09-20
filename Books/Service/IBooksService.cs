@@ -1,13 +1,15 @@
-﻿using Domain.Entities;
+﻿using Domain;
+using Domain.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Service
 {
     public interface IBooksService
     {
-        IEnumerable<Book> GetBooks();
-        void Add(Book book);
-        void Update(Book book);
-        void Delete(string isbn);
+        IEnumerable<Book> Get();
+        Task<OperationResult<Book>> Add(Book book);
+        Task<OperationResult<Book>> Update(Book book);
+        Task<OperationResult<Book>> Delete(string isbn);
     }
 }

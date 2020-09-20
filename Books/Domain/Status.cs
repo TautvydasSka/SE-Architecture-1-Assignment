@@ -3,6 +3,7 @@
     public enum Status
     {
         Success,
-        ValidationError
+        ValidationError,
+        NotFound
     }
 }

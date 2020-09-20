@@ -17,7 +17,24 @@ namespace Infrastructure.DataAccess
             _dbContext = dbContext;
         }
 
-        public Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate = null,
+        public IEnumerable<T> Get(Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            IQueryable<T> query = _dbContext.Set<T>();
+
+            if (include != null) query = include(query);
+            if (predicate != null) query = query.Where(predicate);
+
+            return query.AsEnumerable();
+        }
+
+        public void Delete(T entity)
+        {
+            _dbContext.Remove(entity); 
+        }
+
+        public Task<T> GetFirstOrDefault(
+            Expression<Func<T, bool>> predicate = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             IQueryable<T> query = _dbContext.Set<T>();
@@ -28,15 +45,9 @@ namespace Infrastructure.DataAccess
             return query.FirstOrDefaultAsync();
         }
 
-        public IEnumerable<T> Get(Expression<Func<T, bool>> predicate = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task Add(T entity)
         {
-            IQueryable<T> query = _dbContext.Set<T>();
-
-            if (include != null) query = include(query);
-            if (predicate != null) query = query.Where(predicate);
-
-            return query.AsEnumerable();
+            await _dbContext.AddAsync(entity);
         }
     }
 }

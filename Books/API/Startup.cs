@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Service;
 
-namespace Books
+namespace API
 {
     public class Startup
     {

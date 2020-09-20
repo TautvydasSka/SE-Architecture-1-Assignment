@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Linq;
 
-namespace Books.ExtensionMethods
+namespace API.ExtensionMethods
 {
     public static class ValidationResultExtensionMethods
     {
