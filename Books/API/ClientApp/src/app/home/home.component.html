@@ -10,9 +10,9 @@
         <li class="list-group-item clearfix" *ngFor="let book of books">
           <span>{{book.author}}: "{{book.title}}" (ISBN: {{book.isbn}}, {{book.pageCount}} pages)</span>
           <span class="float-right button-group">
-            <button type="button" class="btn btn-info action-button"><span class="glyphicon glyphicon-edit"></span>
+            <button type="button" class="btn btn-info action-button" (click)="showModal(true, book)"><span class="glyphicon glyphicon-edit"></span>
               Edit </button>
-            <button type="button" class="btn btn-danger action-button"><span class="glyphicon glyphicon-remove"></span>
+            <button type="button" class="btn btn-danger action-button" (click)="delete(book.isbn)"><span class="glyphicon glyphicon-remove"></span>
               Delete </button>
           </span>
         </li>
@@ -25,26 +25,33 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{isEdit ? 'Edit' : 'Add'}} book</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form [formGroup]="bookForm">
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
+            <label for="book-isbn" class="col-form-label">ISBN:</label>
+            <input type="text" class="form-control" id="book-isbn" formControlName="isbn" [readonly]="isEdit">
           </div>
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
+            <label for="book-author" class="col-form-label">Author:</label>
+            <input type="text" class="form-control" id="book-author" formControlName="author">
+          </div>
+          <div class="form-group">
+            <label for="book-title" class="col-form-label">Title:</label>
+            <input type="text" class="form-control" id="book-title" formControlName="title">
+          </div>
+          <div class="form-group">
+            <label for="book-page-count" class="col-form-label">Page count:</label>
+            <input type="text" class="form-control" id="book-page-count" formControlName="pageCount">
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
+        <button class="btn btn-primary" (click)="submit()">{{isEdit ? 'Edit' : 'Add'}}</button>
       </div>
     </div>
   </div>
