@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
     <div class="col-lg-12">
-      <button type="button" class="btn btn-primary button-add float-right" (click)="showModal(false)">Add new</button>  
+      <button type="button" class="btn btn-primary button-add float-right" (click)="showModal(false)">Add new</button>
     </div>
   </div>
   <div class="row">
@@ -10,9 +10,11 @@
         <li class="list-group-item clearfix" *ngFor="let book of books">
           <span>{{book.author}}: "{{book.title}}" (ISBN: {{book.isbn}}, {{book.pageCount}} pages)</span>
           <span class="float-right button-group">
-            <button type="button" class="btn btn-info action-button" (click)="showModal(true, book)"><span class="glyphicon glyphicon-edit"></span>
+            <button type="button" class="btn btn-info action-button" (click)="showModal(true, book)"><span
+                class="glyphicon glyphicon-edit"></span>
               Edit </button>
-            <button type="button" class="btn btn-danger action-button" (click)="delete(book.isbn)"><span class="glyphicon glyphicon-remove"></span>
+            <button type="button" class="btn btn-danger action-button" (click)="delete(book.isbn)"><span
+                class="glyphicon glyphicon-remove"></span>
               Delete </button>
           </span>
         </li>
@@ -21,7 +23,8 @@
   </div>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" #modal>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" #modal>
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -35,18 +38,31 @@
           <div class="form-group">
             <label for="book-isbn" class="col-form-label">ISBN:</label>
             <input type="text" class="form-control" id="book-isbn" formControlName="isbn" [readonly]="isEdit">
+            <div class="text-danger" *ngIf="isbnError">
+              {{isbnError}}
+            </div>
           </div>
           <div class="form-group">
             <label for="book-author" class="col-form-label">Author:</label>
             <input type="text" class="form-control" id="book-author" formControlName="author">
+            <div class="text-danger" *ngIf="authorError">
+              {{authorError}}
+            </div>
           </div>
           <div class="form-group">
             <label for="book-title" class="col-form-label">Title:</label>
             <input type="text" class="form-control" id="book-title" formControlName="title">
+            <div class="text-danger" *ngIf="titleError">
+              {{titleError}}
+            </div>
           </div>
           <div class="form-group">
             <label for="book-page-count" class="col-form-label">Page count:</label>
-            <input type="text" class="form-control" id="book-page-count" formControlName="pageCount">
+            <input pattern="[0-9.]+" type="number" class="form-control" id="book-page-count"
+              formControlName="pageCount">
+            <div class="text-danger" *ngIf="pageCountError">
+              {{pageCountError}}
+            </div>
           </div>
         </form>
       </div>
